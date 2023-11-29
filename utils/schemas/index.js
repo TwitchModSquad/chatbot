@@ -6,6 +6,7 @@ const Identity = require("./Identity");
 
 const Session = require("./Session");
 
+const TwitchChat = require("./TwitchChat");
 const TwitchCommand = require("./TwitchCommand");
 const TwitchToken = require("./TwitchToken");
 const TwitchUser = require("./TwitchUser");
@@ -17,6 +18,7 @@ class Schemas {
 
     Session = Session;
     
+    TwitchChat = TwitchChat;
     TwitchCommand = TwitchCommand;
     TwitchToken = TwitchToken;
     TwitchUser = TwitchUser;

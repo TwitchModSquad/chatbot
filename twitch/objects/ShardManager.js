@@ -23,6 +23,14 @@ for (const file of listenerFiles) {
     listeners.push(listener);
 }
 
+const listenerType = {
+    message: listeners.filter(x => x.event === "message"),
+};
+
+for (const event in listenerType) {
+    console.log(`Loaded ${listenerType[event].length} ${event} listeners`)
+}
+
 class ShardManager {
 
     /**
@@ -42,8 +50,24 @@ class ShardManager {
     #createShard(channels = []) {
         const shard = new Shard(channels);
 
-        shard.client.onMessage((channel, user, text, message) => {
-            
+        shard.client.onMessage(async (_, __, text, message) => {
+            if (message.channelId && message.userInfo?.userId) {
+                try {
+                    const channel = await utils.Twitch.getUserById(message.channelId, false, true);
+                    const user = await utils.Twitch.getUserById(message.userInfo.userId, false, true);
+
+                    listenerType.message.forEach(listener => {
+                        try {
+                            listener.execute(shard, channel, user, text, message);
+                        } catch(err) {
+                            console.error(`Error in listener ${listener.name}:`)
+                            console.error(err);
+                        }
+                    });
+                } catch(err) {
+                    console.error(err);
+                }
+            }
         });
 
         this.shards.push(shard);
