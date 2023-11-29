@@ -17,6 +17,7 @@
     top: 3.4em;
     left: 15em;
     z-index: -1;
+    transition: .25s;
 }
 
 .menu-closed .sidebar-container {
@@ -25,6 +26,7 @@
 
 .menu-closed .main-content {
     left: 0;
+    width: 100%;
 }
 
 .sidebar {
