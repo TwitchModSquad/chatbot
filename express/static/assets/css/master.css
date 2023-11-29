@@ -33,6 +33,10 @@ body {
     padding: 0;
 }
 
+a {
+    color: var(--secondary-text-color);
+}
+
 #skip-to-content {
     background-color: var(--primary-text-color);
     color: var(--primary-background-color);
@@ -51,6 +55,9 @@ body {
 }
 
 header {
+    position: fixed;
+    top: 0;
+    left: 0;
     background-color: var(--primary-sqa-color);
     width: 100%;
     display: flex;
@@ -114,6 +121,7 @@ header h1 {
     transform: scale(.9);
     opacity: 0;
     border-radius: 5px;
+    z-index: 999;
 }
 
 #select-channel.open {
@@ -177,4 +185,11 @@ header h1 {
 .partner {
     color: var(--primary-twitch-color);
     text-shadow: var(--heavy-shadow);
+}
+
+footer {
+    font-size: .8em;
+    opacity: .4;
+    text-align: center;
+    margin: 1em;
 }

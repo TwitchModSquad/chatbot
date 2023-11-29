@@ -1,0 +1,107 @@
+.sidebar-container {
+    background-color: var(--secondary-background-color);
+    position: fixed;
+    top: 3.5em;
+    left: 0;
+    width: 100%;
+    max-width: 15em;
+    overflow: auto;
+    height: calc(100% - 3.5em);
+    transition: 0.25s left;
+}
+
+.main-content {
+    width: calc(100% - 15em);
+    position: absolute;
+    padding-top: .1em;
+    top: 3.4em;
+    left: 15em;
+    z-index: -1;
+}
+
+.menu-closed .sidebar-container {
+    left: -15em;
+}
+
+.menu-closed .main-content {
+    left: 0;
+}
+
+.sidebar {
+    width: 15em;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.sidebar ul a {
+    font-size: .9em;
+    display: block;
+    position: relative;
+    color: var(--secondary-text-color);
+    text-transform: none;
+    padding: .8em .8em .8em 2.75em;
+    text-decoration: none;
+    transition: 0.25s background-color;
+}
+
+.sidebar ul li.active a,
+.sidebar ul.active li.group-header a {
+    background-color: var(--primary-sqa-color);
+    color: var(--primary-text-color);
+    font-weight: 500;
+}
+
+.sidebar ul.active li.group-header a {
+    background-color: var(--secondary-sqa-color);
+    box-shadow: 0px 0px 12px rgba(0,0,0,0.1);
+}
+
+.sidebar .group-header a {
+    background-color: rgba(0,0,0,0.05);
+}
+
+.sidebar ul a:hover {
+    background-color: rgba(0,0,0,0.1);
+}
+
+.sidebar ul a i {
+    font-size: 1em;
+    position: absolute;
+    top: 50%;
+    left: 1em;
+    transform: translateY(-50%);
+    opacity: .8;
+}
+
+.sidebar > ul > li {
+    background-color: rgba(0,0,0,0.1);
+    margin: .8em;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.sidebar .group-header {
+    position: relative;
+    color: var(--primary-text-color);
+    font-weight: 500;
+}
+
+.sidebar .group-header a::before {
+    font-family: "Font Awesome 6 Pro";
+    content: "\f0d7";
+    font-size: .7em;
+    font-weight: 900;
+    position: absolute;
+    top: 50%;
+    left: 1.55em;
+    transform: translateY(-50%);
+    transition: .25s transform;
+}
+
+.sidebar .collapse .group-header a::before {
+    transform: translateY(-50%) rotateX(180deg);
+}

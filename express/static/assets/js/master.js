@@ -24,4 +24,17 @@ $(function() {
         channelSelectOpen = !channelSelectOpen;
         return false;
     });
+    
+    $(".group-header a").on("click", function() {
+        const group = $(this).parent().parent();
+        const div = group.find("div");
+
+        if (group.hasClass("collapse")) {
+            div.slideDown(200);
+        } else {
+            div.slideUp(200);
+        }
+        group.toggleClass("collapse");
+        return false;
+    });
 });

@@ -1,0 +1,27 @@
+<% 
+const SQABOT_PAGES = ["sqa-dashboard"];
+const CHATBOT_PAGES = ["bot-commands"];
+let isSqabot = SQABOT_PAGES.includes(page);
+let isChatbot = CHATBOT_PAGES.includes(page);
+%><div class="sidebar-container">
+    <nav class="sidebar">
+        <ul>
+            <li>
+                <ul class="<%- isSqabot ? `active` : `collapse` %>">
+                    <li class="group-header"><a href="#">Sqabot</a></li>
+                    <div<%- isSqabot ? `` : ` style="display: none;"` %>>
+                        <li<%- page === "sqa-dashboard" ? ` class="active"` : `` %>><a href="<%= baseUri %>"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+                    </div>
+                </ul>
+            </li>
+            <li>
+                <ul class="<%- isChatbot ? `active` : `collapse` %>">
+                    <li class="group-header"><a href="#">Chat Bot</a></li>
+                    <div<%- isChatbot ? `` : ` style="display: none;"` %>>
+                        <li<%- page === "bot-commands" ? ` class="active"` : `` %>><a href="<%= baseUri %>bot/commands"><i class="fa-solid fa-message-bot"></i> Commands</a></li>
+                    </div>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+</div>

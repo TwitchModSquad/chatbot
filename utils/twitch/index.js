@@ -1,5 +1,6 @@
 const {ApiClient} = require("@twurple/api");
 const {RefreshingAuthProvider} = require("@twurple/auth");
+const {EventSubWsListener} = require("@twurple/eventsub-ws");
 
 const config = require("../../config.json");
 
@@ -54,6 +55,12 @@ class Twitch {
      * @type {ApiClient}
      */
     raw = api;
+
+    /**
+     * EventSub Listener
+     * @type {EventSubWsListener}
+     */
+    eventSub = new EventSubWsListener({ apiClient: api });
 
     /**
      * Cache for Twitch users
