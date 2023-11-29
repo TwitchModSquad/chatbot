@@ -91,7 +91,7 @@ class ShardManager {
                 chosenShard = shard;
             }
         }
-        if (chosenShard !== null) {
+        if (chosenShard === null) {
             chosenShard = this.#createShard([channel]);
         } else {
             chosenShard.join(channel);
