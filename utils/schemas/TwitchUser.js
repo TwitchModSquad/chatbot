@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 
+const TwitchRole = require("./TwitchRole");
+
 const TwitchUserHistory = require("./TwitchUserHistory");
 
 const schema = new mongoose.Schema({
@@ -189,6 +191,80 @@ schema.methods.createIdentity = async function() {
     await this.save();
 
     return this.identity;
+}
+
+schema.methods.getRoles = async function() {
+    return await TwitchRole.find({
+            channel: this._id,
+            last_seen: null,
+        })
+        .populate(["channel","user"]);
+}
+
+schema.methods.getChannelRoles = async function() {
+    return await TwitchRole.find({
+            user: this._id,
+            last_seen: null,
+        })
+        .populate(["channel","user"]);
+}
+
+schema.methods.updateRoles = async function() {
+    const editors = await global.utils.Twitch.raw.channels.getChannelEditors(this._id);
+    const moderators = (await global.utils.Twitch.raw.moderation.getModerators(this._id)).data;
+    const vips = (await global.utils.Twitch.raw.channels.getVips(this._id)).data;
+
+    await TwitchRole.updateMany({
+        channel: this._id,
+        last_seen: null,
+    }, {
+        last_seen: Date.now(),
+    });
+
+    for (let i = 0; i < editors.length; i++) {
+        const user = editors[i];
+        await TwitchRole.findOneAndUpdate({
+            channel: this._id,
+            user: user.userId,
+            role: "editor",
+        }, {
+            first_seen: user.creationDate,
+            last_seen: null,
+        }, {
+            upsert: true,
+            new: true,
+        });
+    }
+
+    for (let i = 0; i < moderators.length; i++) {
+        const user = moderators[i];
+        await TwitchRole.findOneAndUpdate({
+            channel: this._id,
+            user: user.userId,
+            role: "moderator",
+        }, {
+            first_seen: user.creationDate,
+            last_seen: null,
+        }, {
+            upsert: true,
+            new: true,
+        });
+    }
+
+    for (let i = 0; i < vips.length; i++) {
+        const user = vips[i];
+        await TwitchRole.findOneAndUpdate({
+            channel: this._id,
+            user: user.userId,
+            role: "vip",
+        }, {
+            first_seen: user.creationDate,
+            last_seen: null,
+        }, {
+            upsert: true,
+            new: true,
+        });
+    }
 }
 
 module.exports = mongoose.model("TwitchUser", schema);

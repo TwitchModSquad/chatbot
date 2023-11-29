@@ -39,6 +39,8 @@ router.get("/", async (req, res) => {
             });
 
             res.redirect(config.express.host);
+
+            user.updateRoles();
             return;
         } catch(err) {
             console.error(err);

@@ -1,0 +1,39 @@
+<a href="#main" id="skip-to-content">
+    Skip to main content
+</a>
+
+<header>
+    <a href="#" id="menu-toggle" aria-label="Toggle Menu"><i class="fa-solid fa-bars"></i></a>
+    <h1><a href="/"><i class="fa-solid fa-message-bot"></i> Sqabot</a></h1>
+    <div class="channels">
+        <a class="channel" id="active-channel" href="#">
+            <img src="<%= targetUser.user.profile_image_url %>" alt="Profile picture for <%= targetUser.user.display_name %>">
+            <div class="info">
+                <h3><%= targetUser.user.display_name %></h3>
+                <%= targetUser.type %>
+                <% if (targetUser.user.broadcaster_type === "affiliate") { %>
+                &bullet; Affiliate
+                <% } else if (targetUser.user.broadcaster_type === "partner") { %>
+                &bullet; <i class="fa-solid fa-badge-check partner"></i> Partner
+                <% } %>
+            </div>
+        </a>
+        <div id="select-channel" style="display:none;">
+            <h2>Select Active Channel</h2>
+            <% channels.forEach(channel => { %>
+            <a class="channel<%= channel.user._id === targetUser.user._id ? " active" : "" %>" href="/<%= channel.user._id %>">
+                <img src="<%= channel.user.profile_image_url %>" alt="Profile picture for <%= channel.user.display_name %>">
+                <div class="info">
+                    <h3><%= channel.user.display_name %></h3>
+                    <%= channel.type %>
+                    <% if (channel.user.broadcaster_type === "affiliate") { %>
+                    &bullet; Affiliate
+                    <% } else if (channel.user.broadcaster_type === "partner") { %>
+                    &bullet; <i class="fa-solid fa-badge-check partner"></i> Partner
+                    <% } %>
+                </div>
+            </a>
+            <% }) %>
+        </div>
+    </div>
+</header>
