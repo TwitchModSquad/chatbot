@@ -117,6 +117,22 @@ class ShardManager {
         return removedFrom;
     }
 
+    /**
+     * Retrieves the shard of the specified channel, if applicable
+     * @param {string} channel
+     * @returns {Shard?}
+     */
+    getChannelShard(channel) {
+        channel = "#" + channel.replace("#","").toLowerCase();
+        for (let i = 0; i < this.shards.length; i++) {
+            const shard = this.shards[i];
+            if (shard.client.currentChannels.includes(channel)) {
+                return shard;
+            }
+        }
+        return null;
+    }
+
     constructor() {
         utils.Schemas.TwitchUser.find({listening: true}).then(channels => {
             channels = channels.map(x => x.login);

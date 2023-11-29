@@ -193,3 +193,18 @@ footer {
     text-align: center;
     margin: 1em;
 }
+
+section.box {
+    background-color: var(--tertiary-background-color);
+    margin: 1em;
+    padding: 1em;
+}
+
+section.box h2 {
+    background-color: var(--secondary-background-color);
+    margin: -1em -1em 1em -1em;
+    padding: 1em;
+    font-size: .9em;
+    font-weight: 700;
+    text-transform: uppercase;
+}

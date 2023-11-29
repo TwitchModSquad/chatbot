@@ -11,8 +11,16 @@
     <%- include("../partials/sidebar", {baseUri: baseUri, page: "sqa-dashboard"}) %>
 
     <div class="main-content">
-        <main id="main">
-
+        <main id="main" class="container container-md">
+            <section class="box col-4">
+                <h2>Channel Status</h2>
+                <% if (currentShard) { %>
+                    We're watching your channel!
+                    <%= currentShard.id %>
+                <% } else { %>
+                    We're not in your channel yet :(
+                <% } %>
+            </section>
         </main>
 
         <%- include("../partials/footer") %>
