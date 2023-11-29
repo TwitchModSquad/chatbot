@@ -29,7 +29,7 @@ router.use("/", async (req, res, next) => {
 });
 
 router.get("/", async (req, res) => {
-    res.redirect(`${config.express.host}${encodeURIComponent(req.twitchUsers[0].user._id)}`);
+    res.redirect(`${config.express.host}${encodeURIComponent(req.twitchUsers[0].user._id)}/`);
 });
 
 router.use("/:userId", async (req, res, next) => {
@@ -61,7 +61,7 @@ router.use("/:userId", async (req, res, next) => {
     if (req.targetUser) {
         next();
     } else {
-        res.redirect(`${config.express.host}${encodeURIComponent(req.twitchUsers[0].user._id)}`);
+        res.redirect(`${config.express.host}${encodeURIComponent(req.twitchUsers[0].user._id)}/`);
     }
 });
 
