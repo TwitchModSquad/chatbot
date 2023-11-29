@@ -9,6 +9,8 @@ router.get("/", async (req, res) => {
         try {
             const userId = await utils.Twitch.authProvider.addUserForCode(req.query.code);
             const user = await utils.Twitch.getUserById(userId);
+
+            if (userId === config.twitch.id) return res.send("You may not authenticate with this user.");
     
             const accessToken = await utils.Twitch.authProvider.getAccessTokenForUser(user._id);
             await utils.Schemas.TwitchToken.findOneAndUpdate({
