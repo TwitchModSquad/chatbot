@@ -12,6 +12,7 @@ router.get("/", (req, res) => {
     const currentShard = shardManager.getChannelShard(req.targetUser.user.login);
     res.render("pages/index", {
         currentShard,
+        isOwned: req.isOwned,
         targetUser: req.targetUser,
         channels: req.twitchUsers,
         baseUri: config.express.host + req.targetUser.user._id + "/",
