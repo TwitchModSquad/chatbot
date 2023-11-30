@@ -22,6 +22,9 @@
     --primary-discord-color: #5865f2;
     --secondary-discord-color: #4f5ceb;
     --dark-discord-color: #2e379c;
+
+    --green: #368436;
+    --red: #c83232;
 }
 
 body {
@@ -35,6 +38,20 @@ body {
 
 a {
     color: var(--secondary-text-color);
+}
+
+.code {
+    display: inline-block;
+    margin: .1em;
+    padding: .4em;
+    border-radius: 3px;
+    background-color: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.code.code-full {
+    display: block;
+    margin: .4em .1em;
 }
 
 #skip-to-content {
@@ -207,4 +224,16 @@ section.box h2 {
     font-size: .9em;
     font-weight: 700;
     text-transform: uppercase;
+}
+
+section.box.outline {
+    border-top: 2px solid transparent;
+}
+
+section.box.outline-green {
+    border-color: var(--green);
+}
+
+section.box.outline-red {
+    border-color: var(--red);
 }

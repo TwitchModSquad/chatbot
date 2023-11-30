@@ -38,3 +38,12 @@ $(function() {
         return false;
     });
 });
+
+const api = {
+    get: function(uri, callback) {
+        $.get(uri, callback);
+    },
+    post: function(uri, body, callback) {
+        $.post(uri, body, callback);
+    },
+}

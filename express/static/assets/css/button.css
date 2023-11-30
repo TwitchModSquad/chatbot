@@ -1,0 +1,24 @@
+.button {
+    display: inline-block;
+    background-color: var(--primary-sqa-color);
+    color: var(--primary-text-color);
+    border: none;
+    padding: .6em .8em;
+    margin: .6em;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.button.button-full {
+    display: block;
+}
+
+.button.button-success {
+    background-color: var(--green);
+}
+
+.button.button-danger {
+    background-color: var(--red);
+}

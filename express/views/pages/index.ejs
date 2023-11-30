@@ -3,6 +3,8 @@
 <head>
     <%- include("../partials/head") %>
 
+    <script src="/assets/js/dashboard.js"></script>
+
     <title>Dashboard - Sqabot by TMS</title>
 </head>
 <body>
@@ -12,14 +14,17 @@
 
     <div class="main-content">
         <main id="main" class="container container-md">
-            <section class="box col-4">
+            <section class="box col-4 outline outline-<%= currentShard ? "green" : "red" %> status-box">
                 <h2>Channel Status</h2>
-                <% if (currentShard) { %>
+                <div class="bot-active"<%- currentShard ? "" : ' style="display: none;"' %>>
                     We're watching your channel!
-                    <%= currentShard.id %>
-                <% } else { %>
+                    <code class="code code-full">Shard ID: <span class="shard-id"><%= currentShard?.id ? currentShard.id : "??" %></span></code>
+                    <% if (isOwned) { %><button class="button button-danger button-full part" data-id="<%= targetUser.user._id %>">Part Channel</button><% } %>
+                </div>
+                <div class="bot-inactive"<%- !currentShard ? "" : ' style="display: none;"' %>>
                     We're not in your channel yet :(
-                <% } %>
+                    <% if (isOwned) { %><button class="button button-success button-full join" data-id="<%= targetUser.user._id %>">Join Channel</button><% } %>
+                </div>
             </section>
         </main>
 
