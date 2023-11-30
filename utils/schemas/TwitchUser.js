@@ -206,7 +206,11 @@ schema.methods.getChannelRoles = async function() {
             user: this._id,
             last_seen: null,
         })
-        .populate(["channel","user"]);
+        .populate(["channel","user","role"]);
+}
+
+schema.methods.seed = async function() {
+    await this.updateRoles();
 }
 
 schema.methods.updateRoles = async function() {
@@ -214,11 +218,13 @@ schema.methods.updateRoles = async function() {
     const moderators = (await global.utils.Twitch.raw.moderation.getModerators(this._id)).data;
     const vips = (await global.utils.Twitch.raw.channels.getVips(this._id)).data;
 
+    const roles = await global.utils.Twitch.RoleManager.getChannelRoles(this._id);
+
     await TwitchUserRole.updateMany({
         channel: this._id,
         last_seen: null,
         role: {
-            $ne: "custom",
+            $in: roles.filter(x => x.type === "editor" || x.type === "moderator" || x.type === "vip"),
         },
     }, {
         last_seen: Date.now(),
@@ -229,7 +235,7 @@ schema.methods.updateRoles = async function() {
         await TwitchUserRole.findOneAndUpdate({
             channel: this._id,
             user: user.userId,
-            role: "editor",
+            role: roles.find(x => x.type === "editor"),
         }, {
             first_seen: user.creationDate,
             last_seen: null,
@@ -244,7 +250,7 @@ schema.methods.updateRoles = async function() {
         await TwitchUserRole.findOneAndUpdate({
             channel: this._id,
             user: user.userId,
-            role: "moderator",
+            role: roles.find(x => x.type === "moderator"),
         }, {
             first_seen: user.creationDate,
             last_seen: null,
@@ -259,7 +265,7 @@ schema.methods.updateRoles = async function() {
         await TwitchUserRole.findOneAndUpdate({
             channel: this._id,
             user: user.userId,
-            role: "vip",
+            role: roles.find(x => x.type === "vip"),
         }, {
             first_seen: user.creationDate,
             last_seen: null,

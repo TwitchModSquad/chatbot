@@ -12,8 +12,14 @@ router.use("/auth", auth);
 
 router.use("/", async (req, res, next) => {
     const { cookies } = req;
-    if (cookies?.sqa_session) {
-        const session = await utils.Schemas.Session.findById(cookies.sqa_session)
+    let sessionId;
+    if (req.headers.authorization) {
+        sessionId = req.headers.authorization;
+    } else if (cookies?.sqa_session) {
+        sessionId = cookies.sqa_session;
+    }
+    if (sessionId) {
+        const session = await utils.Schemas.Session.findById(sessionId)
             .populate("identity");
         
         if (session?.identity) {
@@ -27,11 +33,11 @@ router.use("/", async (req, res, next) => {
                 const user = req.ownedUsers[i];
                 const roles = await user.getChannelRoles();
                 req.twitchUsers = req.twitchUsers.concat(
-                    roles.filter(x => x.role === "editor")
+                    roles.filter(x => x.role.type === "editor")
                             .map(x => {return {user: x.channel, type: "Editor"}})
                 );
                 req.twitchUsers = req.twitchUsers.concat(
-                    roles.filter(x => x.role === "moderator")
+                    roles.filter(x => x.role.type === "moderator")
                             .map(x => {return {user: x.channel, type: "Moderator"}})
                 );
             }
@@ -49,7 +55,12 @@ router.use("/", async (req, res, next) => {
             }
         }
     }
-    res.redirect(utils.Twitch.generateOAuthLink(config.twitch.default_scope));
+    if (req.path.startsWith("/api/")) {
+        res.status(401);
+        res.json({ok: false, error: "Unauthorized"});
+    } else {
+        res.redirect(utils.Twitch.generateOAuthLink(config.twitch.default_scope));
+    }
 });
 
 router.use("/api", api);

@@ -14,15 +14,9 @@ const schema = new mongoose.Schema({
         required: true,
     },
     role: {
-        type: String,
-        enum: ["editor","moderator","vip","subscriber","custom"],
-        default: "custom",
-        index: true,
-        required: true,
-    },
-    customRole: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "TwitchRole",
+        required: true,
         index: true,
     },
     first_seen: {
@@ -33,7 +27,6 @@ const schema = new mongoose.Schema({
     last_seen: {
         type: Date,
         default: null,
-        required: true,
     }
 });
 

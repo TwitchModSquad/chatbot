@@ -1,6 +1,37 @@
 let channelSelectOpen = false;
 let channelSelectMoving = false;
 
+function openObject(obj, editContainer) {
+    editContainer.slideDown(200);
+    obj.addClass("object-open");
+    obj.find("input").first().focus();
+}
+
+function closeObject(obj, editContainer) {
+    editContainer.slideUp(200);
+    obj.removeClass("object-open");
+}
+
+function toggleObjectOpen() {
+    const obj = $(this).parent();
+    const editContainer = obj.find(".edit-container");
+
+    if (obj.hasClass("object-open")) {
+        closeObject(obj, editContainer);
+    } else {
+        openObject(obj, editContainer);
+    }
+}
+
+function arrayToTable(array) {
+    let table = {};
+    array.forEach(function(obj) {
+        if (!obj.name || !obj.value) return;
+        table[obj.name] = obj.value;
+    });
+    return table;
+}
+
 $(function() {
     $("#menu-toggle").on("click", function() {
         $("body").toggleClass("menu-closed");
@@ -37,13 +68,38 @@ $(function() {
         group.toggleClass("collapse");
         return false;
     });
+
+    $(".object-container").on("click", toggleObjectOpen);
 });
 
 const api = {
     get: function(uri, callback) {
-        $.get(uri, callback);
+        $.ajax({
+            url: uri,
+            type: "GET",
+            success: callback,
+            error: callback,
+        });
     },
     post: function(uri, body, callback) {
-        $.post(uri, body, callback);
+        if (!body) body = {};
+        $.ajax({
+            url: uri,
+            contentType: 'application/json',
+            data: JSON.stringify(body),
+            type: "POST",
+            success: callback,
+            error: callback,
+        });
     },
+    patch: function(uri, body, callback) {
+        $.ajax({
+            url: uri,
+            contentType: 'application/json',
+            data: JSON.stringify(body),
+            type: "PATCH",
+            success: callback,
+            error: callback,
+        });
+    }
 }

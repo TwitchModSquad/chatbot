@@ -8,7 +8,7 @@ const schema = new mongoose.Schema({
     },
     type: {
         type: String,
-        enum: ["editor","moderator","vip","subscriber","custom"],
+        enum: ["broadcaster", "editor","moderator","vip","subscriber","custom"],
         default: "custom",
         index: true,
         required: true,
@@ -27,14 +27,20 @@ const schema = new mongoose.Schema({
     },
     description: {
         type: String,
-        minlength: 2,
+        minlength: 0,
         maxlength: 200,
     },
-    aliases: {
-        type: [String],
-        required: true,
-        default: [],
-    },
 });
+
+schema.methods.api = function() {
+    return {
+        id: this._id,
+        channel: this.channel?._id ? this.channel._id : this.channel,
+        type: this.type,
+        weight: this.weight,
+        name: this.name,
+        description: this.description,
+    };
+}
 
 module.exports = mongoose.model("TwitchRole", schema);

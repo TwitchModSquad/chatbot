@@ -1,7 +1,18 @@
-<!DOCTYPE html>
+<% 
+const PRETTY_NAMES = {
+    broadcaster: "Broadcaster",
+    editor: "Editor",
+    moderator: "Moderator",
+    vip: "VIP",
+    subscriber: "Subscriber",
+    custom: "Custom",
+};
+ %><!DOCTYPE html>
 <html lang="en">
 <head>
     <%- include("../../partials/head") %>
+
+    <script src="/assets/js/basicObjectSubmit.js"></script>
 
     <title>Role Manager - Sqabot by TMS</title>
 </head>
@@ -11,8 +22,72 @@
     <%- include("../../partials/sidebar", {baseUri: baseUri, page: "role-manager"}) %>
 
     <div class="main-content">
-        <main id="main" class="container container-md">
-            
+        <main id="main">
+            <section class="box">
+                <h2><i class="fa-solid fa-dice-d6"></i> Role Manager <div class="buttons"><button type="button" class="button button-success new"><i class="fa-solid fa-plus"></i> Add a New Role</button></div></h2>
+                <div class="row row-head container">
+                    <div class="col-1">Details</div>
+                    <div class="col-2">Name</div>
+                    <div class="col-5 optional">Description</div>
+                    <div class="col-2 right-align">Weight</div>
+                    <div class="col-2">Type</div>
+                </div>
+                <form class="new-container col-12 container container-md" data-type="role" data-channel-id="<%= targetUser.user._id %>" style="display:none;">
+                    <h3 class="col-12">New Role</h3>
+                    <label class="form-group col-3">
+                        Name
+                        <input type="text" name="name" minlength="2" maxlength="50" placeholder="Regular" required />
+                        <small>The name of the Role. Keep this descriptive, but very short.</small>
+                    </label>
+                    <label class="form-group col-6">
+                        Description
+                        <input type="text" name="description" maxlength="200" placeholder="One of my regulars. Thank you!" />
+                        <small>The description of the Role. What does it represent? What user(s) get it? How?</small>
+                    </label>
+                    <label class="form-group col-3">
+                        Weight
+                        <input type="number" name="weight" min="0" max="10000" step="1" placeholder="25" required>
+                        <small>The weight of the Role. Used to determine permissions.</small>
+                    </label>
+                    <div class="buttons col-12">
+                        <button class="button button-danger" onclick="$(this).closest('form').slideUp(200)" type="button">Cancel</button>
+                        <button class="button button-success" type="submit">Create</button>
+                    </div>
+                </form>
+            <% roles.forEach(role => { %>
+                <div class="object" data-type="role" data-id="<%= String(role._id) %>" data-channel-id="<%= role?.channel?._id ? role.channel._id : role.channel %>" tabindex="0" aria-label="Edit Role: <%= role.name %>">
+                    <div class="row object-container container">
+                        <div class="col-1 obj-toggle"></div>
+                        <div class="col-2 name"><%= role.name %></div>
+                        <div class="col-5 description optional"><%= role.description %></div>
+                        <div class="col-2 weight right-align"><%= role.weight %></div>
+                        <div class="col-2">
+                            <code class="code"><%= PRETTY_NAMES.hasOwnProperty(role.type) ? PRETTY_NAMES[role.type] : role.type %></code>
+                        </div>
+                    </div>
+                    <form class="edit-container col-12 container container-md basic-object-submit" style="display: none;">
+                        <label class="form-group col-3">
+                            Name
+                            <input type="text" name="name" value="<%= role.name %>" minlength="2" maxlength="50" required />
+                            <small>The name of the Role. Keep this descriptive, but very short.</small>
+                        </label>
+                        <label class="form-group col-6">
+                            Description
+                            <input type="text" name="description" value="<%= role.description %>" maxlength="200" />
+                            <small>The description of the Role. What does it represent? What user(s) get it? How?</small>
+                        </label>
+                        <label class="form-group col-3">
+                            Weight
+                            <input type="number" name="weight" value="<%= role.weight %>" min="0" max="10000" step="1" required>
+                            <small>The weight of the Role. Used to determine permissions.</small>
+                        </label>
+                        <div class="buttons col-12">
+                            <button class="button" type="submit">Save</button>
+                        </div>
+                    </form>
+                </div>
+            <% }) %>
+            </section>
         </main>
 
         <%- include("../../partials/footer") %>

@@ -9,6 +9,8 @@ const Cache = require("../cache/Cache");
 const TwitchUser = require("../schemas/TwitchUser");
 const TwitchToken = require("../schemas/TwitchToken");
 
+const RoleManager = require("./RoleManager");
+
 const authProvider = new RefreshingAuthProvider({
     clientId: config.twitch.client_id,
     clientSecret: config.twitch.client_secret,
@@ -61,6 +63,12 @@ class Twitch {
      * @type {EventSubWsListener}
      */
     eventSub = new EventSubWsListener({ apiClient: api });
+
+    /**
+     * Role manager
+     * @type {RoleManager}
+     */
+    RoleManager = new RoleManager();
 
     /**
      * Cache for Twitch users

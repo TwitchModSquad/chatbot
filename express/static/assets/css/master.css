@@ -23,7 +23,7 @@
     --secondary-discord-color: #4f5ceb;
     --dark-discord-color: #2e379c;
 
-    --green: #368436;
+    --green: #3d9d3d;
     --red: #c83232;
 }
 
@@ -216,9 +216,11 @@ section.box {
     background-color: var(--tertiary-background-color);
     margin: 1em;
     padding: 1em;
+    border-top: 2px solid var(--primary-sqa-color);
 }
 
 section.box h2 {
+    position: relative;
     background-color: var(--secondary-background-color);
     margin: -1em -1em 1em -1em;
     padding: 1em;
@@ -227,8 +229,19 @@ section.box h2 {
     text-transform: uppercase;
 }
 
-section.box.outline {
-    border-top: 2px solid transparent;
+section.box h2 i {
+    margin-right: .3em;
+}
+
+section.box h2 .buttons {
+    position: absolute;
+    top: 50%;
+    right: 1em;
+    transform: translateY(-50%);
+}
+
+section.box h2 .buttons button {
+    border-radius: 1px;
 }
 
 section.box.outline-green {
@@ -237,4 +250,63 @@ section.box.outline-green {
 
 section.box.outline-red {
     border-color: var(--red);
+}
+
+.object {
+    cursor: pointer;
+    align-items: center;
+    margin: 0;
+    transition: .25s;
+}
+
+.object .obj-toggle {
+    position: relative;
+}
+
+.object .obj-toggle::before {
+    font-family: "Font Awesome 6 Pro";
+    content: "\f0d7";
+    font-size: 1em;
+    font-weight: 900;
+    position: absolute;
+    top: 50%;
+    left: 1.5em;
+    transform: translateY(-50%);
+    transition: .25s transform;
+}
+
+.object:nth-child(even) {
+    background-color: rgba(0,0,0,0.1);
+}
+
+.object:not(.object-open):hover {
+    background-color: rgba(0,0,0,0.2);
+}
+
+.object-open {
+    margin: .4em 0;
+    background-color: rgba(0,0,0,0.2);
+    border-radius: 5px;
+}
+
+.object-open .obj-toggle::before {
+    transform: translateY(-50%) rotateX(180deg);
+}
+
+.object .edit-container {
+    background-color: rgba(0,0,0,0.1);
+}
+
+form .buttons {
+    margin: 0 1em 1em 0;
+    text-align: right;
+}
+.new-container {
+    background-color: rgba(255,255,255,0.025);
+}
+
+.new-container h3 {
+    font-weight: 500;
+    font-size: 1.2em;
+    margin: 1em 1em 0 1em;
 }

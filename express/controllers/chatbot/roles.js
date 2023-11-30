@@ -4,9 +4,12 @@ const router = express.Router();
 const utils = require("../../../utils/");
 const config = require("../../../config.json");
 
-router.get("/", (req, res) => {
+router.get("/", async (req, res) => {
+    const roles = await utils.Twitch.RoleManager.getChannelRoles(req.targetUser.user._id);
     res.render("pages/chatbot/roles", {
+        roles,
         targetUser: req.targetUser,
+        isOwned: req.isOwned,
         channels: req.twitchUsers,
         baseUri: config.express.host + req.targetUser.user._id + "/",
     });
