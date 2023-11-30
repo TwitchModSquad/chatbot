@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const TwitchRole = require("./TwitchRole");
+const TwitchUserRole = require("./TwitchUserRole");
 
 const TwitchUserHistory = require("./TwitchUserHistory");
 
@@ -194,7 +194,7 @@ schema.methods.createIdentity = async function() {
 }
 
 schema.methods.getRoles = async function() {
-    return await TwitchRole.find({
+    return await TwitchUserRole.find({
             channel: this._id,
             last_seen: null,
         })
@@ -202,7 +202,7 @@ schema.methods.getRoles = async function() {
 }
 
 schema.methods.getChannelRoles = async function() {
-    return await TwitchRole.find({
+    return await TwitchUserRole.find({
             user: this._id,
             last_seen: null,
         })
@@ -214,16 +214,19 @@ schema.methods.updateRoles = async function() {
     const moderators = (await global.utils.Twitch.raw.moderation.getModerators(this._id)).data;
     const vips = (await global.utils.Twitch.raw.channels.getVips(this._id)).data;
 
-    await TwitchRole.updateMany({
+    await TwitchUserRole.updateMany({
         channel: this._id,
         last_seen: null,
+        role: {
+            $ne: "custom",
+        },
     }, {
         last_seen: Date.now(),
     });
 
     for (let i = 0; i < editors.length; i++) {
         const user = editors[i];
-        await TwitchRole.findOneAndUpdate({
+        await TwitchUserRole.findOneAndUpdate({
             channel: this._id,
             user: user.userId,
             role: "editor",
@@ -238,7 +241,7 @@ schema.methods.updateRoles = async function() {
 
     for (let i = 0; i < moderators.length; i++) {
         const user = moderators[i];
-        await TwitchRole.findOneAndUpdate({
+        await TwitchUserRole.findOneAndUpdate({
             channel: this._id,
             user: user.userId,
             role: "moderator",
@@ -253,7 +256,7 @@ schema.methods.updateRoles = async function() {
 
     for (let i = 0; i < vips.length; i++) {
         const user = vips[i];
-        await TwitchRole.findOneAndUpdate({
+        await TwitchUserRole.findOneAndUpdate({
             channel: this._id,
             user: user.userId,
             role: "vip",

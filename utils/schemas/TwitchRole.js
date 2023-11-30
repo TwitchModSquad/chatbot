@@ -5,30 +5,36 @@ const schema = new mongoose.Schema({
         type: String,
         ref: "TwitchUser",
         index: true,
-        required: true,
     },
-    user: {
+    type: {
         type: String,
-        ref: "TwitchUser",
+        enum: ["editor","moderator","vip","subscriber","custom"],
+        default: "custom",
         index: true,
         required: true,
     },
-    role: {
+    weight: {
+        type: Number,
+        min: 0,
+        max: 10000,
+        required: true,
+    },
+    name: {
         type: String,
-        enum: ["editor","moderator","vip"],
-        index: true,
+        minlength: 2,
+        maxlength: 50,
         required: true,
     },
-    first_seen: {
-        type: Date,
-        default: Date.now,
-        required: true,
+    description: {
+        type: String,
+        minlength: 2,
+        maxlength: 200,
     },
-    last_seen: {
-        type: Date,
-        default: null,
+    aliases: {
+        type: [String],
         required: true,
-    }
+        default: [],
+    },
 });
 
 module.exports = mongoose.model("TwitchRole", schema);
