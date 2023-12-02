@@ -253,10 +253,13 @@ section.box.outline-red {
 }
 
 .object {
-    cursor: pointer;
     align-items: center;
     margin: 0;
     transition: .25s;
+}
+
+.object.click {
+    cursor: pointer;
 }
 
 .object .obj-toggle {
@@ -309,4 +312,102 @@ form .buttons {
     font-weight: 500;
     font-size: 1.2em;
     margin: 1em 1em 0 1em;
+}
+
+.small-pfp {
+    width: 2em;
+    height: 2em;
+    border-radius: 1em;
+    margin-right: .8em;
+    vertical-align: middle;
+}
+
+.role-select {
+    position: relative;
+    display: inline-block;
+}
+
+.role-select .roles {
+    background-color: var(--tertiary-background-color);
+    font-weight: 500;
+    font-size: .9em;
+    position: absolute;
+    top: -1.5em;
+    left: -.5em;
+    text-wrap: nowrap;
+    box-shadow: var(--shadow);
+    visibility: hidden;
+    opacity: 0;
+    transform: scale(.8);
+    transition: 0.2s;
+}
+
+.role-select-open .roles {
+    visibility: visible;
+    opacity: 1;
+    transform: scale(1);
+}
+
+.role-select .roles h4 {
+    background-color: var(--primary-sqa-color);
+    padding: .8em 1em;
+    font-size: .9em;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.role-select .roles .role {
+    display: block;
+    color: var(--primary-text-color);
+    text-decoration: none;
+    padding: .6em 1em;
+    transition: 0.25s;
+}
+
+.role-select .roles .role:hover,
+.role-select .roles .role:focus {
+    background-color: rgba(0,0,0,0.2);
+}
+
+.role-select small {
+    display: block;
+    padding: .6em;
+    text-align: center;
+}
+
+.code.role {
+    font-size: .9em;
+    color: var(--primary-text-color);
+}
+
+.removable,
+.role-add {
+    position: relative;
+    cursor: pointer;
+}
+
+.removable::before {
+    content: 'Click to Remove';
+    visibility: hidden;
+    position: absolute;
+    font-size: .8em;
+    font-weight: 500;
+    top: -2em;
+    left: 50%;
+    transform: translateX(-50%) scale(.9);
+    background-color: var(--red);
+    padding: .4em .6em;
+    border-radius: 5px;
+    text-wrap: nowrap;
+    transition: .25s;
+    opacity: 0;
+}
+
+.removable:hover::before,
+.removable:focus::before {
+    visibility: visible;
+    top: -2.5em;
+    transform: translateX(-50%) scale(1);
+    opacity: 1;
 }

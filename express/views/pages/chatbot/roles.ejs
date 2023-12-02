@@ -55,7 +55,7 @@ const PRETTY_NAMES = {
                     </div>
                 </form>
             <% roles.forEach(role => { %>
-                <div class="object" data-type="role" data-id="<%= String(role._id) %>" data-channel-id="<%= role?.channel?._id ? role.channel._id : role.channel %>" tabindex="0" aria-label="Edit Role: <%= role.name %>">
+                <div class="object click" data-type="role" data-id="<%= String(role._id) %>" data-channel-id="<%= role?.channel?._id ? role.channel._id : role.channel %>" tabindex="0" aria-label="Edit Role: <%= role.name %>">
                     <div class="row object-container container">
                         <div class="col-1 obj-toggle"></div>
                         <div class="col-2 name"><%= role.name %></div>

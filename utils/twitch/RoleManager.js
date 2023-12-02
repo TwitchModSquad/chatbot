@@ -37,6 +37,7 @@ const DEFAULT_ROLES = [
 class RoleManager {
 
     channelRoleCache = {};
+    userRoleCache = {};
 
     /**
      * Retrieves roles for a specified Channel
@@ -140,11 +141,12 @@ class RoleManager {
 
             try {
                 await role.save();
-                if (role.channel?._id) {
-                    delete this.channelRoleCache[role.channel._id];
-                } else {
-                    delete this.channelRoleCache[role.channel];
-                }
+
+                const channelId = role?.channel?._id ? role.channel._id : role.channel;
+                    
+                delete this.channelRoleCache[channelId];
+                delete this.userRoleCache[channelId];
+
                 resolve(role);
             } catch(err) {
                 reject(err);
@@ -200,9 +202,8 @@ class RoleManager {
 
             const channelId = data?.channel?._id ? data.channel._id : data.channel;
                 
-            if (this.channelRoleCache[channelId]) {
-                delete this.channelRoleCache[channelId];
-            }
+            delete this.channelRoleCache[channelId];
+            delete this.userRoleCache[channelId];
 
             try {
                 resolve(await Role.create(newData));
@@ -228,14 +229,127 @@ class RoleManager {
                 const deleteUserRoles = await UserRole.deleteMany({role: role});
                 const deleteRole = await role.deleteOne();
                 
-                if (this.channelRoleCache[channelId]) {
-                    delete this.channelRoleCache[channelId];
-                }
+                delete this.channelRoleCache[channelId];
+                delete this.userRoleCache[channelId];
 
                 resolve({
                     deletedUserRoles: deleteUserRoles.deletedCount,
                     deletedRoles: deleteRole.deletedCount,
                 });
+            } catch(err) {
+                reject(err);
+            }
+        });
+    }
+
+    /**
+     * Gets all channel user roles for a specified channel
+     * @param {string} channelId 
+     * @returns {Promise<{user: object,roles:object[],maxWeight:number}[]>}
+     */
+    getChannelUsers(channelId) {
+        return new Promise(async (resolve, reject) => {
+            if (this.userRoleCache.hasOwnProperty(channelId)) {
+                return resolve(this.userRoleCache[channelId]);
+            }
+
+            let result = [];
+
+            const userRoles = await UserRole.find({channel: channelId, last_seen: null})
+                .populate(["user","role"]);
+
+            // Construct initial user/role table
+            for (let i = 0; i < userRoles.length; i++) {
+                const userRole = userRoles[i];
+                let storedUser = result.find(x => x.user._id === userRole.user._id);
+                if (storedUser) {
+                    storedUser.roles.push(userRole.role);
+                    storedUser.maxWeight = Math.max(storedUser.maxWeight, userRole.role.weight);
+                } else {
+                    result.push({
+                        user: userRole.user,
+                        roles: [userRole.role],
+                        maxWeight: userRole.role.weight,
+                    });
+                }
+            }
+
+            // Sort user roles by weight
+            for (let i = 0; i < result.length; i++) {
+                result[i].roles.sort((a, b) => b.weight - a.weight);
+            }
+
+            // Sort users by display name then weight
+            result.sort((a, b) => a.user.display_name - b.user.display_name);
+            result.sort((a, b) => b.maxWeight - a.maxWeight);
+
+            this.userRoleCache[channelId] = result;
+
+            resolve(result);
+        });
+    }
+
+    /**
+     * Adds a role to a user
+     * @param {object} role 
+     * @param {object|string} user 
+     * @returns {Promise<object>}
+     */
+    addRoleToUser(role, user) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (role.type !== "custom") {
+                    return reject("Only custom roles may be added to users");
+                }
+
+                const userRole = await UserRole.findOneAndUpdate({
+                    channel: role.channel,
+                    role,
+                    user,
+                }, {
+                    channel: role.channel,
+                    role,
+                    user,
+                    last_seen: null,
+                }, {
+                    upsert: true,
+                    new: true,
+                })
+                .populate(["role", "user", "channel"]);
+
+                const channelId = role?.channel?._id ? role.channel.id : role.channel;
+                delete this.userRoleCache[channelId];
+
+                resolve(userRole);
+            } catch(err) {
+                reject(err);
+            }
+        });
+    }
+
+    /**
+     * Removes a role from a user
+     * @param {object} role 
+     * @param {object|string} user 
+     * @returns {Promise<void>}
+     */
+    removeRoleFromUser(role, user) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (role.type !== "custom") {
+                    return reject("Only custom roles may be removed from users");
+                }
+
+                await UserRole.findOneAndDelete({
+                    channel: role.channel,
+                    role,
+                    user,
+                });
+
+                const channelId = role?.channel?._id ? role.channel.id : role.channel;
+                delete this.userRoleCache[channelId];
+
+                resolve();
             } catch(err) {
                 reject(err);
             }

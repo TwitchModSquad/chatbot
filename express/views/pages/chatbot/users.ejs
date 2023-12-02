@@ -3,6 +3,8 @@
 <head>
     <%- include("../../partials/head") %>
 
+    <script src="/assets/js/userManager.js"></script>
+
     <title>User Manager - Sqabot by TMS</title>
 </head>
 <body>
@@ -11,8 +13,62 @@
     <%- include("../../partials/sidebar", {baseUri: baseUri, page: "/bot/users"}) %>
 
     <div class="main-content">
-        <main id="main" class="container container-md">
-            
+        <main id="main">
+            <section class="box">
+                <h2><i class="fa-solid fa-dice-d6"></i> User Manager <div class="buttons"><button type="button" class="button button-success new"><i class="fa-solid fa-plus"></i> Add a User</button></div></h2>
+                <div class="row row-head container">
+                    <div class="col-4">Display Name</div>
+                    <div class="col-6">Roles</div>
+                    <div class="col-2 right-align">Max Weight</div>
+                </div>
+                <form class="new-container col-12 container container-md" data-type="user" data-channel-id="<%= targetUser.user._id %>" style="display:none;">
+                    <h3 class="col-12">New User</h3>
+                    <label class="form-group col-3">
+                        Name
+                        <input type="text" name="name" minlength="2" maxlength="50" placeholder="Regular" required />
+                        <small>The name of the Role. Keep this descriptive, but very short.</small>
+                    </label>
+                    <label class="form-group col-6">
+                        Description
+                        <input type="text" name="description" maxlength="200" placeholder="One of my regulars. Thank you!" />
+                        <small>The description of the Role. What does it represent? What user(s) get it? How?</small>
+                    </label>
+                    <label class="form-group col-3">
+                        Weight
+                        <input type="number" name="weight" min="0" max="10000" step="1" placeholder="25" required>
+                        <small>The weight of the Role. Used to determine permissions.</small>
+                    </label>
+                    <div class="buttons col-12">
+                        <button class="button button-danger" onclick="$(this).closest('form').slideUp(200)" type="button">Cancel</button>
+                        <button class="button button-success" type="submit">Create</button>
+                    </div>
+                </form>
+            <% userRoles.forEach(userRole => { %>
+                <div class="object" data-type="user" data-id="<%= String(userRole.user._id) %>" data-channel-id="<%= targetUser.user._id %>">
+                    <div class="row object-container container">
+                        <div class="col-4"><img class="small-pfp" src="<%= userRole.user.profile_image_url %>" alt="Profile picture for <%= userRole.user.display_name %>"> <%= userRole.user.display_name %></div>
+                        <div class="col-6">
+                            <% userRole.roles.forEach(role => { %>
+                                <a class="role code<%= role.type === "custom" ? " removable" : "" %>" data-id="<%= String(role._id) %>"><%= role.name %> (<%= comma(role.weight) %>)</a>
+                            <% }) %>
+                            <div class="role-select">
+                                <button class="button add-role" type="button" aria-label="Add Role"><i class="fa-solid fa-plus"></i></button>
+                                <div class="roles">
+                                    <h4><i class="fa-solid fa-plus"></i> Add Roles</h4>
+                                    <% let found = false; customRoles.forEach(role => { if (!userRole.roles.find(x => String(x._id) === String(role._id))) { found = true; %>
+                                    <a href="#" class="role" data-id="<%= role._id %>"><%= role.name %> (<%= comma(role.weight) %>)</a>
+                                    <% }}) %>
+                                    <% if (!found) { %>
+                                        <small>No roles to add!</small>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-2 right-align"><code class="code"><%= userRole.maxWeight %></code></div>
+                    </div>
+                </div>
+            <% }) %>
+            </section>
         </main>
 
         <%- include("../../partials/footer") %>

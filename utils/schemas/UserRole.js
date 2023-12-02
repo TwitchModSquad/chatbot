@@ -30,4 +30,13 @@ const schema = new mongoose.Schema({
     }
 });
 
+schema.methods.api = function() {
+    return {
+        id: this._id,
+        channel: this.channel.api ? this.channel.api() : this.channel,
+        user: this.user.api ? this.user.api() : this.user,
+        role: this.role.api ? this.role.api() : this.role,
+    }
+}
+
 module.exports = mongoose.model("UserRole", schema);

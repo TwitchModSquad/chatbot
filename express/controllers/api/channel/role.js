@@ -81,4 +81,30 @@ router.delete("/:roleId", async (req, res) => {
     });
 });
 
+router.use("/:roleId/user/:userId", async (req, res, next) => {
+    req.user = await utils.Twitch.getUserById(req.params.userId, false, false);
+    if (req.user) {
+        next();
+    } else {
+        res.status(404);
+        res.json({ok: false, error: "The requested user was not found"});
+    }
+});
+
+router.post("/:roleId/user/:userId", async (req, res) => {
+    utils.Twitch.RoleManager.addRoleToUser(req.role, req.user).then(data => {
+        res.json({ok: true, data: data.api()});
+    }, error => {
+        res.json({ok: false, error});
+    });
+});
+
+router.delete("/:roleId/user/:userId", async (req, res) => {
+    utils.Twitch.RoleManager.removeRoleFromUser(req.role, req.user).then(() => {
+        res.json({ok: true});
+    }, error => {
+        res.json({ok: false, error});
+    });
+});
+
 module.exports = router;

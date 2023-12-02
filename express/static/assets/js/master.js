@@ -69,7 +69,7 @@ $(function() {
         return false;
     });
 
-    $(".object-container").on("click", toggleObjectOpen);
+    $(".object.click .object-container").on("click", toggleObjectOpen);
 });
 
 const api = {
