@@ -8,9 +8,9 @@
     <title>Dashboard - Sqabot by TMS</title>
 </head>
 <body>
-    <%- include("../partials/header") %>
+    <%- include("../partials/header", {baseUri: baseUri, page: "/"}) %>
 
-    <%- include("../partials/sidebar", {baseUri: baseUri, page: "sqa-dashboard"}) %>
+    <%- include("../partials/sidebar", {baseUri: baseUri, page: "/"}) %>
 
     <div class="main-content">
         <main id="main" class="container container-md">

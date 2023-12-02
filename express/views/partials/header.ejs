@@ -22,7 +22,7 @@
     <div id="select-channel" class="channels" style="display:none;">
         <h2>Select Active Channel</h2>
         <% channels.forEach(channel => { %>
-        <a class="channel<%= channel.user._id === targetUser.user._id ? " active" : "" %>" href="/<%= channel.user._id %>/">
+        <a class="channel<%= channel.user._id === targetUser.user._id ? " active" : "" %>" href="/<%= channel.user._id %><%= page %>">
             <img src="<%= channel.user.profile_image_url %>" alt="Profile picture for <%= channel.user.display_name %>">
             <div class="info">
                 <h3><%= channel.user.display_name %></h3>
