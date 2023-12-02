@@ -1,5 +1,5 @@
 {
-  "name": "chatbot",
+  "name": "sqabot",
   "version": "1.0.0",
   "description": "Upcoming chat bot",
   "main": "app.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TwitchModSquad/chatbot.git"
+    "url": "git+https://github.com/TwitchModSquad/sqabot.git"
   },
   "keywords": [
     "chatbot",
@@ -18,9 +18,9 @@
   "author": "Twijn",
   "license": "SEE LICENSE IN LICENSE",
   "bugs": {
-    "url": "https://github.com/TwitchModSquad/chatbot/issues"
+    "url": "https://github.com/TwitchModSquad/sqabot/issues"
   },
-  "homepage": "https://github.com/TwitchModSquad/chatbot#readme",
+  "homepage": "https://github.com/TwitchModSquad/sqabot#readme",
   "dependencies": {
     "@twurple/api": "^7.0.6",
     "@twurple/auth": "^7.0.6",
