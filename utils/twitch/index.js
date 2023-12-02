@@ -10,7 +10,6 @@ const TwitchUser = require("../schemas/TwitchUser");
 const TwitchToken = require("../schemas/TwitchToken");
 
 const RoleManager = require("./RoleManager");
-const UserRoleManager = require("./UserRoleManager");
 
 const authProvider = new RefreshingAuthProvider({
     clientId: config.twitch.client_id,
@@ -70,12 +69,6 @@ class Twitch {
      * @type {RoleManager}
      */
     RoleManager = new RoleManager();
-
-    /**
-     * User role manager
-     * @type {UserRoleManager}
-     */
-    UserRoleManager = new UserRoleManager();
 
     /**
      * Cache for Twitch users
