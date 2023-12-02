@@ -23,24 +23,29 @@
                 </div>
                 <form class="new-container col-12 container container-md" data-type="user" data-channel-id="<%= targetUser.user._id %>" style="display:none;">
                     <h3 class="col-12">New User</h3>
-                    <label class="form-group col-3">
-                        Name
-                        <input type="text" name="name" minlength="2" maxlength="50" placeholder="Regular" required />
-                        <small>The name of the Role. Keep this descriptive, but very short.</small>
+                    <label class="form-group col-5">
+                        Username
+                        <input type="text" name="user" minlength="2" maxlength="25" placeholder="DevTwijn" required />
+                        <small>The username of the user to add roles to.</small>
                     </label>
-                    <label class="form-group col-6">
-                        Description
-                        <input type="text" name="description" maxlength="200" placeholder="One of my regulars. Thank you!" />
-                        <small>The description of the Role. What does it represent? What user(s) get it? How?</small>
-                    </label>
-                    <label class="form-group col-3">
-                        Weight
-                        <input type="number" name="weight" min="0" max="10000" step="1" placeholder="25" required>
-                        <small>The weight of the Role. Used to determine permissions.</small>
-                    </label>
+                    <div class="form-group col-7">
+                        Roles
+                        <div>
+                            <div class="role-select">
+                                <button class="button add-role" type="button" aria-label="Add Role"><i class="fa-solid fa-plus"></i></button>
+                                <div class="roles">
+                                    <h4><i class="fa-solid fa-plus"></i> Add Roles</h4>
+                                    <% customRoles.forEach(role => { %>
+                                    <a href="#" class="role" data-id="<%= role._id %>"><%= role.name %> (<%= comma(role.weight) %>)</a>
+                                    <% }) %>
+                                </div>
+                            </div>
+                        </div>
+                        <small>The initial roles to assign to the user.</small>
+                    </div>
                     <div class="buttons col-12">
                         <button class="button button-danger" onclick="$(this).closest('form').slideUp(200)" type="button">Cancel</button>
-                        <button class="button button-success" type="submit">Create</button>
+                        <button class="button button-success" type="submit">Add</button>
                     </div>
                 </form>
             <% userRoles.forEach(userRole => { %>

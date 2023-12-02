@@ -82,16 +82,26 @@ router.delete("/:roleId", async (req, res) => {
 });
 
 router.use("/:roleId/user/:userId", async (req, res, next) => {
-    req.user = await utils.Twitch.getUserById(req.params.userId, false, false);
-    if (req.user) {
+    try {
+        req.user = await utils.Twitch.getUserById(req.params.userId, false, true);
         next();
-    } else {
+    } catch(err) {
         res.status(404);
         res.json({ok: false, error: "The requested user was not found"});
     }
 });
 
-router.post("/:roleId/user/:userId", async (req, res) => {
+router.use("/:roleId/username/:userName", async (req, res, next) => {
+    try {
+        req.user = await utils.Twitch.getUserByName(req.params.userName, true);
+        next();
+    } catch(err) {
+        res.status(404);
+        res.json({ok: false, error: "The requested user was not found"});
+    }
+});
+
+router.post("/:roleId/user(name)?/:user", async (req, res) => {
     utils.Twitch.RoleManager.addRoleToUser(req.role, req.user).then(data => {
         res.json({ok: true, data: data.api()});
     }, error => {
@@ -99,7 +109,7 @@ router.post("/:roleId/user/:userId", async (req, res) => {
     });
 });
 
-router.delete("/:roleId/user/:userId", async (req, res) => {
+router.delete("/:roleId/user(name)?/:user", async (req, res) => {
     utils.Twitch.RoleManager.removeRoleFromUser(req.role, req.user).then(() => {
         res.json({ok: true});
     }, error => {

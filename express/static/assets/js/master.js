@@ -78,7 +78,9 @@ const api = {
             url: uri,
             type: "GET",
             success: callback,
-            error: callback,
+            error: function(e) {
+                callback(e.responseJSON);
+            },
         });
     },
     post: function(uri, body, callback) {
@@ -89,7 +91,9 @@ const api = {
             data: JSON.stringify(body),
             type: "POST",
             success: callback,
-            error: callback,
+            error: function(e) {
+                callback(e.responseJSON);
+            },
         });
     },
     patch: function(uri, body, callback) {
@@ -99,7 +103,9 @@ const api = {
             data: JSON.stringify(body),
             type: "PATCH",
             success: callback,
-            error: callback,
+            error: function(e) {
+                callback(e.responseJSON);
+            },
         });
     },
     "delete": function(uri, callback) {
@@ -107,7 +113,9 @@ const api = {
             url: uri,
             type: "DELETE",
             success: callback,
-            error: callback,
+            error: function(e) {
+                callback(e.responseJSON);
+            },
         });
     }
 }
