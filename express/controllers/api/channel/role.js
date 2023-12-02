@@ -6,6 +6,27 @@ const utils = require("../../../../utils/");
 
 router.use(bodyParser.json());
 
+router.get("/", async (req, res) => {
+    let userRoles = await utils.Twitch.RoleManager.getChannelRoles(req.target._id);
+
+    if (req?.query?.type) {
+        if (typeof(req.query.type) === "object") {
+            userRoles = userRoles.filter(x => req.query.type.includes(x.type));
+        } else {
+            userRoles = userRoles.filter(x => x.type === req.query.type);
+        }
+    }
+
+    if (req?.query?.weight) {
+        userRoles = userRoles.filter(x => String(x.weight) === req.query.weight);
+    }
+    
+    res.json({
+        ok: true,
+        data: userRoles.map(x => x.api()),
+    });
+});
+
 router.post("/", async (req, res) => {
     if (!req.body.hasOwnProperty("name")) {
         return res.json({ok: false, error: "Missing required property 'name'"});
