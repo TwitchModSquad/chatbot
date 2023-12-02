@@ -8,7 +8,7 @@ const utils = require("../../../../utils");
 const shardManager = require("../../../../twitch/objects/ShardManager");
 
 router.get("/", (req, res) => {
-    res.send("It exists, but we're not too sure what it does yet 🤔");
+    res.json({ok: true, data: req.twitchUsers.map(x => {return {user: x.user.api(), type: x.type}})});
 });
 
 router.use("/:userId", async (req, res, next) => {
@@ -21,6 +21,10 @@ router.use("/:userId", async (req, res, next) => {
         res.status(404);
         res.json({ok: false, error: "The requested user was not found."});
     }
+});
+
+router.get("/:userId", (req, res) => {
+    res.json({ok: true, data: req.target.api()});
 });
 
 router.post("/:userId/join", async (req, res) => {
