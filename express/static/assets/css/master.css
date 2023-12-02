@@ -137,6 +137,7 @@ header h1 {
     transition: .2s;
     transform: scale(.9);
     opacity: 0;
+    border-left: 2px solid var(--primary-sqa-color);
     border-radius: 5px;
     box-shadow: var(--shadow);
     z-index: 999;
