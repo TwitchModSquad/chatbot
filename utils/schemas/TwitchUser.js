@@ -230,6 +230,20 @@ schema.methods.updateRoles = async function() {
         last_seen: Date.now(),
     });
 
+    let allUsers = [
+        ...editors.map(x => x.userId),
+        ...moderators.map(x => x.userId),
+        ...vips.map(x => x.id),
+    ];
+
+    let retrievedUsers = [];
+    for (let i = 0; i < allUsers.length; i++) {
+        const userId = allUsers[i];
+        if (retrievedUsers.includes(userId)) continue;
+        retrievedUsers.push(userId);
+        global.utils.Twitch.getUserById(userId, false, true).catch(console.error);
+    }
+
     for (let i = 0; i < editors.length; i++) {
         const user = editors[i];
         await UserRole.findOneAndUpdate({
@@ -264,7 +278,7 @@ schema.methods.updateRoles = async function() {
         const user = vips[i];
         await UserRole.findOneAndUpdate({
             channel: this._id,
-            user: user.userId,
+            user: user.id,
             role: roles.find(x => x.type === "vip"),
         }, {
             first_seen: user.creationDate,
