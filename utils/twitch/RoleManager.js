@@ -212,6 +212,36 @@ class RoleManager {
         });
     }
 
+    /**
+     * Deletes a role
+     * @param {object} role 
+     * @returns {Promise<{deletedUserRoles:number,deletedUsers:number}>}
+     */
+    deleteRole(role) {
+        return new Promise(async (resolve, reject) => {
+            if (role.type !== "custom") {
+                return reject("You may only delete custom roles");
+            }
+            try {
+                const channelId = role?.channel?._id ? role.channel.id : role.channel;
+
+                const deleteUserRoles = await TwitchUserRole.deleteMany({role: role});
+                const deleteRole = await role.deleteOne();
+                
+                if (this.channelRoleCache[channelId]) {
+                    delete this.channelRoleCache[channelId];
+                }
+
+                resolve({
+                    deletedUserRoles: deleteUserRoles.deletedCount,
+                    deletedRoles: deleteRole.deletedCount,
+                });
+            } catch(err) {
+                reject(err);
+            }
+        });
+    }
+
 }
 
 module.exports = RoleManager;

@@ -101,5 +101,13 @@ const api = {
             success: callback,
             error: callback,
         });
+    },
+    "delete": function(uri, callback) {
+        $.ajax({
+            url: uri,
+            type: "DELETE",
+            success: callback,
+            error: callback,
+        });
     }
 }

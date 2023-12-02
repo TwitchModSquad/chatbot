@@ -82,6 +82,7 @@ const PRETTY_NAMES = {
                             <small>The weight of the Role. Used to determine permissions.</small>
                         </label>
                         <div class="buttons col-12">
+                            <% if (role.type === "custom") { %><button class="button button-danger delete" type="button">Delete Role</button><% } %>
                             <button class="button" type="submit">Save</button>
                         </div>
                     </form>

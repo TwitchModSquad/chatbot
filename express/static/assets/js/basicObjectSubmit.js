@@ -38,6 +38,28 @@ $(function() {
         return false;
     });
 
+    $(".basic-object-submit button.delete").on("click", function() {
+        const button = $(this);
+        const obj = button.closest(".object");
+
+        const objType = obj.attr("data-type");
+        const objId = obj.attr("data-id");
+        const channelId = obj.attr("data-channel-id");
+
+        api.delete(`/api/channel/${channelId}/${objType}/${objId}`, function(data) {
+            if (data.ok) {
+                obj.slideUp(200);
+                setTimeout(function() {
+                    obj.remove();
+                }, 200);
+            } else {
+                alert(data.error);
+            }
+        });
+
+        return false;
+    });
+
     $(".new").on("click", function() {
         $(".new-container").slideToggle(200);
     });

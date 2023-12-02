@@ -2,6 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const router = express.Router();
 
+const utils = require("../../../../utils/");
+
 router.use(bodyParser.json());
 
 router.post("/", async (req, res) => {
@@ -33,7 +35,6 @@ router.use("/:roleId", async (req, res, next) => {
     if (req.role) {
         next();
     } else {
-        console.error(err);
         res.status(404);
         res.json({ok: false, error: "The requested role was not found."});
     }
@@ -46,6 +47,14 @@ router.get("/:roleId", async (req, res) => {
 router.patch("/:roleId", async (req, res) => {
     utils.Twitch.RoleManager.editRole(req.role, req.body).then(role => {
         res.json({ok: true, data: role.api()});
+    }, error => {
+        res.json({ok: false, error});
+    });
+});
+
+router.delete("/:roleId", async (req, res) => {
+    utils.Twitch.RoleManager.deleteRole(req.role).then(data => {
+        res.json({ok: true, data});
     }, error => {
         res.json({ok: false, error});
     });
