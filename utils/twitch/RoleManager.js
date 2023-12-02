@@ -198,6 +198,12 @@ class RoleManager {
             newData.channel = data.channel;
             newData.type = "custom";
 
+            const channelId = data?.channel?._id ? data.channel._id : data.channel;
+                
+            if (this.channelRoleCache[channelId]) {
+                delete this.channelRoleCache[channelId];
+            }
+
             try {
                 resolve(await TwitchRole.create(newData));
             } catch(err) {
