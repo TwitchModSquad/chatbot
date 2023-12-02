@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const TwitchUserRole = require("./TwitchUserRole");
+const UserRole = require("./UserRole");
 
 const TwitchUserHistory = require("./TwitchUserHistory");
 
@@ -194,7 +194,7 @@ schema.methods.createIdentity = async function() {
 }
 
 schema.methods.getRoles = async function() {
-    return await TwitchUserRole.find({
+    return await UserRole.find({
             channel: this._id,
             last_seen: null,
         })
@@ -202,7 +202,7 @@ schema.methods.getRoles = async function() {
 }
 
 schema.methods.getChannelRoles = async function() {
-    return await TwitchUserRole.find({
+    return await UserRole.find({
             user: this._id,
             last_seen: null,
         })
@@ -220,7 +220,7 @@ schema.methods.updateRoles = async function() {
 
     const roles = await global.utils.Twitch.RoleManager.getChannelRoles(this._id);
 
-    await TwitchUserRole.updateMany({
+    await UserRole.updateMany({
         channel: this._id,
         last_seen: null,
         role: {
@@ -232,7 +232,7 @@ schema.methods.updateRoles = async function() {
 
     for (let i = 0; i < editors.length; i++) {
         const user = editors[i];
-        await TwitchUserRole.findOneAndUpdate({
+        await UserRole.findOneAndUpdate({
             channel: this._id,
             user: user.userId,
             role: roles.find(x => x.type === "editor"),
@@ -247,7 +247,7 @@ schema.methods.updateRoles = async function() {
 
     for (let i = 0; i < moderators.length; i++) {
         const user = moderators[i];
-        await TwitchUserRole.findOneAndUpdate({
+        await UserRole.findOneAndUpdate({
             channel: this._id,
             user: user.userId,
             role: roles.find(x => x.type === "moderator"),
@@ -262,7 +262,7 @@ schema.methods.updateRoles = async function() {
 
     for (let i = 0; i < vips.length; i++) {
         const user = vips[i];
-        await TwitchUserRole.findOneAndUpdate({
+        await UserRole.findOneAndUpdate({
             channel: this._id,
             user: user.userId,
             role: roles.find(x => x.type === "vip"),

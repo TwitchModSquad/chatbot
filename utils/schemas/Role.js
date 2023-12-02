@@ -43,4 +43,4 @@ schema.methods.api = function() {
     };
 }
 
-module.exports = mongoose.model("TwitchRole", schema);
+module.exports = mongoose.model("Role", schema);

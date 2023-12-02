@@ -1,5 +1,5 @@
-const TwitchRole = require("../schemas/TwitchRole");
-const TwitchUserRole = require("../schemas/TwitchUserRole");
+const Role = require("../schemas/Role");
+const UserRole = require("../schemas/UserRole");
 
 const DEFAULT_ROLES = [
     {
@@ -54,7 +54,7 @@ class RoleManager {
     
                 for (let i = 0; i < DEFAULT_ROLES.length; i++) {
                     const role = DEFAULT_ROLES[i];
-                    const customRole = await TwitchRole.findOne({
+                    const customRole = await Role.findOne({
                             channel: channelId,
                             type: role.type,
                         });
@@ -63,10 +63,10 @@ class RoleManager {
                     } else {
                         let data = role;
                         data.channel = channelId;
-                        const newRole = await TwitchRole.create(data);
+                        const newRole = await Role.create(data);
                         roles.push(newRole);
                         if (data.type === "broadcaster") {
-                            await TwitchUserRole.create({
+                            await UserRole.create({
                                 channel: channelId,
                                 user: channelId,
                                 role: newRole._id,
@@ -77,7 +77,7 @@ class RoleManager {
     
                 roles = [
                     ...roles,
-                    ...(await TwitchRole.find({
+                    ...(await Role.find({
                         channel: channelId,
                         type: "custom",
                     })),
@@ -205,7 +205,7 @@ class RoleManager {
             }
 
             try {
-                resolve(await TwitchRole.create(newData));
+                resolve(await Role.create(newData));
             } catch(err) {
                 reject(err);
             }
@@ -225,7 +225,7 @@ class RoleManager {
             try {
                 const channelId = role?.channel?._id ? role.channel.id : role.channel;
 
-                const deleteUserRoles = await TwitchUserRole.deleteMany({role: role});
+                const deleteUserRoles = await UserRole.deleteMany({role: role});
                 const deleteRole = await role.deleteOne();
                 
                 if (this.channelRoleCache[channelId]) {

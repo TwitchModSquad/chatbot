@@ -8,11 +8,11 @@ const Session = require("./Session");
 
 const TwitchChat = require("./TwitchChat");
 const TwitchCommand = require("./TwitchCommand");
-const TwitchRole = require("./TwitchRole");
+const Role = require("./Role");
 const TwitchToken = require("./TwitchToken");
 const TwitchUser = require("./TwitchUser");
 const TwitchUserHistory = require("./TwitchUserHistory");
-const TwitchUserRole = require("./TwitchUserRole");
+const UserRole = require("./UserRole");
 
 class Schemas {
 
@@ -22,11 +22,11 @@ class Schemas {
     
     TwitchChat = TwitchChat;
     TwitchCommand = TwitchCommand;
-    TwitchRole = TwitchRole;
+    Role = Role;
     TwitchToken = TwitchToken;
     TwitchUser = TwitchUser;
     TwitchUserHistory = TwitchUserHistory;
-    TwitchUserRole = TwitchUserRole;
+    UserRole = UserRole;
 
     async schema() {
         console.log("Connecting to MongoDB...");

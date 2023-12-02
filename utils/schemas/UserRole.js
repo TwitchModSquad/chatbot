@@ -15,7 +15,7 @@ const schema = new mongoose.Schema({
     },
     role: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "TwitchRole",
+        ref: "Role",
         required: true,
         index: true,
     },
@@ -30,4 +30,4 @@ const schema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model("TwitchUserRole", schema);
+module.exports = mongoose.model("UserRole", schema);
