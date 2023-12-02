@@ -71,6 +71,22 @@ const schema = new mongoose.Schema({
     },
 });
 
+schema.methods.api = function() {
+    return {
+        id: this._id,
+        login: this.login,
+        display_name: this.display_name,
+        type: this.type,
+        broadcaster_type: this.broadcaster_type,
+        follower_count: this.follower_count,
+        description: this.description,
+        profile_image_url: this.profile_image_url,
+        offline_image_url: this.offline_image_url,
+        created_at: this.created_at,
+        updated_at: this.updated_at,
+    }
+}
+
 const TRACKED_CHANGES = [
     "login",
     "type",
