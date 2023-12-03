@@ -25,7 +25,6 @@ schema.methods.getTwitchUsers = async function() {
         users = userCache[String(this._id)].twitchUsers;
     }
     if (!users) {
-        console.log("retrieve users");
         users = await TwitchUser.find({identity: this})
             .populate("identity");
         if (!userCache.hasOwnProperty(String(this._id))) {
