@@ -209,20 +209,55 @@ schema.methods.createIdentity = async function() {
     return this.identity;
 }
 
+const MAX_ROLE_CACHE_TIME = 10 * 60 * 1000;
+let roleCache = {};
+
 schema.methods.getRoles = async function() {
-    return await UserRole.find({
-            channel: this._id,
-            last_seen: null,
-        })
-        .populate(["channel","user"]);
+    let roles = null;
+    if (roleCache.hasOwnProperty(this._id)) {
+        if (roleCache[this._id].cacheTime + MAX_ROLE_CACHE_TIME > Date.now()) {
+            roles = roleCache[this._id].roles;
+        }
+    }
+    if (!roles) {
+        roles = await UserRole.find({
+                channel: this._id,
+                last_seen: null,
+            })
+            .populate(["channel","user"]);
+
+        roleCache[this._id] = {
+            roles,
+            cacheTime: Date.now(),
+        };
+        console.log("getting roles");
+    }
+    return roles;
 }
 
+let channelRoleCache = {};
+
 schema.methods.getChannelRoles = async function() {
-    return await UserRole.find({
-            user: this._id,
-            last_seen: null,
-        })
-        .populate(["channel","user","role"]);
+    let roles = null;
+    if (channelRoleCache.hasOwnProperty(this._id)) {
+        if (channelRoleCache[this._id].cacheTime + MAX_ROLE_CACHE_TIME > Date.now()) {
+            roles = channelRoleCache[this._id].roles;
+        }
+    }
+    if (!roles) {
+        roles = await UserRole.find({
+                user: this._id,
+                last_seen: null,
+            })
+            .populate(["channel","user","role"]);
+
+        channelRoleCache[this._id] = {
+            roles,
+            cacheTime: Date.now(),
+        };
+        console.log("getting roles");
+    }
+    return roles;
 }
 
 schema.methods.seed = async function() {
