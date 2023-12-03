@@ -22,7 +22,6 @@ router.use("/", async (req, res, next) => {
     }
     if (sessionId) {
         let session = sessionCache[sessionId];
-        req.start = Date.now();
 
         if (!session) {
             session = await utils.Schemas.Session.findById(sessionId)
@@ -35,7 +34,7 @@ router.use("/", async (req, res, next) => {
             req.ownedUsers = await req.session.identity.getTwitchUsers();
             req.twitchUsers = req.ownedUsers
                 .map(x => {return {user: x, type: "Your Account"}});
-console.log("GET SESSION: " + (Date.now() - req.start));
+
             // Utilize the "owned users" list to retrieve roles in which the user is a moderator/editor
             for (let i = 0; i < req.ownedUsers.length; i++) {
                 const user = req.ownedUsers[i];
@@ -87,8 +86,6 @@ router.use("/:userId", async (req, res, next) => {
     } else {
         res.redirect(`${config.express.host}${encodeURIComponent(req.twitchUsers[0].user._id)}/`);
     }
-
-    console.log("DIRECT TO PAGE: " + (Date.now() - req.start))
 });
 
 router.use("/:userId", pages);
