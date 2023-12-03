@@ -21,12 +21,13 @@ router.use("/", async (req, res, next) => {
         sessionId = cookies.sqa_session;
     }
     if (sessionId) {
-        let session = sessionCache?.sessionId;
+        let session = sessionCache[sessionId];
         const start = Date.now();
 
         if (!session) {
             session = await utils.Schemas.Session.findById(sessionId)
                 .populate("identity");
+            sessionCache[sessionId] = session;
                 console.log("getting session");
         }
         
