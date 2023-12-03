@@ -8,7 +8,7 @@ router.get("/", async (req, res) => {
     if (req?.query?.code) {
         try {
             const userId = await utils.Twitch.authProvider.addUserForCode(req.query.code);
-            const user = await utils.Twitch.getUserById(userId);
+            const user = await utils.Twitch.getUserById(userId, false, true);
 
             if (userId === config.twitch.id) return res.send("You may not authenticate with this user.");
     
