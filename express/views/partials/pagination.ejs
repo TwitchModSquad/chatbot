@@ -8,9 +8,9 @@ for (const prop in query) {
 }
 if (pagination.pages === 0) return;
 %><div class="pagination">
-    <a class="button" href="<%= uri + `page=${Math.max(1,pagination.page-1)}` %>"<%- pagination.page === 1 ? ` disabled="disabled"` : "" %>>Prev</a>
+    <a class="button" aria-label="Previous Page" href="<%= uri + `page=${Math.max(1,pagination.page-1)}` %>"<%- pagination.page === 1 ? ` disabled="disabled"` : "" %>>Prev</a>
     <div class="page-count">
         Page <%= pagination.page %>/<%= pagination.pages %>
     </div>
-    <a class="button" href="<%= uri + `page=${Math.min(pagination.pages,pagination.page+1)}` %>"<%- pagination.page === pagination.pages ? ` disabled="disabled"` : "" %>>Next</a>
+    <a class="button" aria-label="Next Page" href="<%= uri + `page=${Math.min(pagination.pages,pagination.page+1)}` %>"<%- pagination.page === pagination.pages ? ` disabled="disabled"` : "" %>>Next</a>
 </div>
