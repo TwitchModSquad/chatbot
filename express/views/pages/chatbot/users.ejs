@@ -16,6 +16,20 @@
         <main id="main">
             <section class="box">
                 <h2><i class="fa-solid fa-dice-d6"></i> User Manager <div class="buttons"><button type="button" class="button button-success new"><i class="fa-solid fa-plus"></i> Add a User</button></div></h2>
+                <form method="GET" class="search remove-inactive">
+                    Search for Users
+                    <div class="search-box">
+                        <input type="text" name="username" id="username" value="<%= query.username %>" placeholder="Search for a User">
+                        <select name="role" id="role">
+                            <option value="all"<%- query.role === "all" ? ` selected="selected"` : "" %>>All Roles</option>
+                            <% allRoles.forEach(role => { %><option value="<%= role._id %>"<%- String(role._id) === query.role ? ` selected="selected"` : "" %>><%= role.name %> (<%= role.weight %>)</option><% }) %>
+                        </select>
+                        <button class="button" type="submit" aria-label="Search"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </div>
+                </form>
+                
+                <%- include("../../partials/pagination", {uri: `users`, pagination, query}) %>
+
                 <div class="row row-head container">
                     <div class="col-4">Display Name</div>
                     <div class="col-6">Roles</div>
@@ -25,7 +39,7 @@
                     <h3 class="col-12">New User</h3>
                     <label class="form-group col-5">
                         Username
-                        <input type="text" name="user" minlength="2" maxlength="25" placeholder="DevTwijn" required />
+                        <input type="text" name="user" minlength="2" maxlength="25" placeholder="DevTwijn" required>
                         <small>The username of the user to add roles to.</small>
                     </label>
                     <div class="form-group col-7">
@@ -73,6 +87,11 @@
                     </div>
                 </div>
             <% }) %>
+                <% if (userRoles.length === 0) { %>
+                    <div class="none">No users to show here. <img src="/assets/images/emotes/sadge.png" alt="Sadge Emote" class="emote"></div>
+                <% } %>
+                
+                <%- include("../../partials/pagination", {uri: `users`, pagination, query}) %>
             </section>
         </main>
 

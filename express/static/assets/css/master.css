@@ -301,6 +301,13 @@ section.box.outline-red {
     background-color: rgba(0,0,0,0.1);
 }
 
+.none {
+    font-size: .9em;
+    text-align: center;
+    font-weight: 500;
+    padding: 1em;
+}
+
 form .buttons {
     margin: 0 1em 1em 0;
     text-align: right;
@@ -413,4 +420,26 @@ form .buttons {
     top: -2.5em;
     transform: translateX(-50%) scale(1);
     opacity: 1;
+}
+
+.emote {
+    height: 1.2em;
+    vertical-align: middle;
+}
+
+.pagination {
+    font-size: .7em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pagination a {
+    background-color: rgba(0,0,0,0.1);
+    transition: .25s background-color;
+}
+
+.pagination a:hover,
+.pagination a:focus {
+    background-color: rgba(0,0,0,0.15);
 }

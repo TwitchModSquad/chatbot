@@ -70,6 +70,22 @@ $(function() {
     });
 
     $(".object.click .object-container").on("click", toggleObjectOpen);
+
+    $("form.remove-inactive").on("submit", function() {
+        const form = $(this);
+        form.find("input").each(function() {
+            const input = $(this);
+            if (!input.val()) {
+                input.remove();
+            }
+        });
+        form.find("select").each(function() {
+            const select = $(this);
+            if (select.val() === "all") {
+                select.remove();
+            }
+        });
+    });
 });
 
 const api = {
