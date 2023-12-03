@@ -10,6 +10,8 @@ const config = require("../../config.json");
 
 router.use("/auth", auth);
 
+let sessionCache = {};
+
 router.use("/", async (req, res, next) => {
     const { cookies } = req;
     let sessionId;
@@ -19,15 +21,21 @@ router.use("/", async (req, res, next) => {
         sessionId = cookies.sqa_session;
     }
     if (sessionId) {
-        const session = await utils.Schemas.Session.findById(sessionId)
-            .populate("identity");
+        let session = sessionCache?.sessionId;
+        const start = Date.now();
+
+        if (!session) {
+            session = await utils.Schemas.Session.findById(sessionId)
+                .populate("identity");
+                console.log("getting session");
+        }
         
         if (session?.identity) {
             req.session = session;
             req.ownedUsers = await req.session.identity.getTwitchUsers();
             req.twitchUsers = req.ownedUsers
                 .map(x => {return {user: x, type: "Your Account"}});
-
+console.log(Date.now() - start);
             // Utilize the "owned users" list to retrieve roles in which the user is a moderator/editor
             for (let i = 0; i < req.ownedUsers.length; i++) {
                 const user = req.ownedUsers[i];

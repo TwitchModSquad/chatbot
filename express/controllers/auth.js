@@ -25,6 +25,8 @@ router.get("/", async (req, res) => {
 
             const identity = await user.createIdentity();
 
+            identity.clearUserCache();
+
             const session = await utils.Schemas.Session.create({
                 _id: utils.stringGenerator(64),
                 identity: identity,

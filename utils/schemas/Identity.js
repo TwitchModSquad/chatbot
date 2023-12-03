@@ -13,9 +13,30 @@ const schema = new mongoose.Schema({
     },
 });
 
+let userCache = {};
+
+schema.methods.clearUserCache = async function() {
+    delete userCache[String(this._id)];
+}
+
 schema.methods.getTwitchUsers = async function() {
-    return await TwitchUser.find({identity: this})
-        .populate("identity");
+    let users;
+    if (userCache.hasOwnProperty(String(this._id))) {
+        users = userCache[String(this._id)].twitchUsers;
+    }
+    if (!users) {
+        console.log("retrieve users");
+        users = await TwitchUser.find({identity: this})
+            .populate("identity");
+        if (!userCache.hasOwnProperty(String(this._id))) {
+            userCache[String(this._id)] = {
+                twitchUsers: null,
+                discordUsers: null,
+            };
+        }
+        userCache[String(this._id)].twitchUsers = users;
+    }
+    return users;
 }
 
 module.exports = mongoose.model("Identity", schema);
