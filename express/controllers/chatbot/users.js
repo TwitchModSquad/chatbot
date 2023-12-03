@@ -44,7 +44,7 @@ router.get("/", async (req, res) => {
     for (let i = startIndex; i < endIndex; i++) {
         userRoles.push(channelUserRoles[i]);
     }
-
+console.log("RENDER: " + (Date.now() - req.start));
     // Render
     res.render("pages/chatbot/users", {
         userRoles,
