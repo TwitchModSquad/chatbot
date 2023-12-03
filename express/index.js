@@ -13,6 +13,10 @@ app.use(express.static("express/static"));
 
 app.use(cookieParser());
 
+app.use(req => {
+    req.startTime = Date.now();
+});
+
 const controllers = require("./controllers/");
 app.use("/", controllers);
 
