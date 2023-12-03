@@ -38,10 +38,10 @@ router.get("/", async (req, res) => {
     if (isNaN(page)) page = 1;
 
     let startIndex = (page - 1) * USERS_PER_PAGE;
-    let endIndex = Math.min(startIndex + USERS_PER_PAGE + 1, users - 1);
+    let endIndex = Math.min(startIndex + USERS_PER_PAGE, users);
 
     const userRoles = [];
-    for (let i = startIndex; i <= endIndex; i++) {
+    for (let i = startIndex; i < endIndex; i++) {
         userRoles.push(channelUserRoles[i]);
     }
 
