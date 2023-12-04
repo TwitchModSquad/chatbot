@@ -230,7 +230,6 @@ schema.methods.getRoles = async function() {
             roles,
             cacheTime: Date.now(),
         };
-        console.log("getting roles");
     }
     return roles;
 }
@@ -255,7 +254,6 @@ schema.methods.getChannelRoles = async function() {
             roles,
             cacheTime: Date.now(),
         };
-        console.log("getting roles");
     }
     return roles;
 }
