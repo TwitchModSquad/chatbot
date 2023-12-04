@@ -1,8 +1,10 @@
 <% 
 const SQABOT_PAGES = ["/"];
-const CHATBOT_PAGES = ["/bot/roles","/bot/users","/bot/commands"];
+const MANAGER_PAGES = ["/managers/roles","/managers/users"];
+const ROUTINE_PAGES = ["/routines/commands"];
 let isSqabot = SQABOT_PAGES.includes(page);
-let isChatbot = CHATBOT_PAGES.includes(page);
+let isManager = MANAGER_PAGES.includes(page);
+let isRoutine = ROUTINE_PAGES.includes(page);
 %><div class="sidebar-container">
     <nav class="sidebar">
         <ul>
@@ -15,12 +17,19 @@ let isChatbot = CHATBOT_PAGES.includes(page);
                 </ul>
             </li>
             <li>
-                <ul class="<%- isChatbot ? `active` : `collapse` %>">
-                    <li class="group-header"><a href="#">Chat Bot</a></li>
-                    <div<%- isChatbot ? `` : ` style="display: none;"` %>>
-                        <li<%- page === "/bot/roles" ? ` class="active"` : `` %>><a href="<%= baseUri %>bot/roles"><i class="fa-solid fa-dice-d6"></i> Role Manager</a></li>
-                        <li<%- page === "/bot/users" ? ` class="active"` : `` %>><a href="<%= baseUri %>bot/users"><i class="fa-solid fa-users"></i> User Manager</a></li>
-                        <li<%- page === "/bot/commands" ? ` class="active"` : `` %>><a href="<%= baseUri %>bot/commands"><i class="fa-solid fa-message-bot"></i> Bot Commands</a></li>
+                <ul class="<%- isManager ? `active` : `collapse` %>">
+                    <li class="group-header"><a href="#">Role &amp; User Managers</a></li>
+                    <div<%- isManager ? `` : ` style="display: none;"` %>>
+                        <li<%- page === "/managers/roles" ? ` class="active"` : `` %>><a href="<%= baseUri %>managers/roles"><i class="fa-solid fa-dice-d6"></i> Role Manager</a></li>
+                        <li<%- page === "/managers/users" ? ` class="active"` : `` %>><a href="<%= baseUri %>managers/users"><i class="fa-solid fa-users"></i> User Manager</a></li>
+                    </div>
+                </ul>
+            </li>
+            <li>
+                <ul class="<%- isRoutine ? `active` : `collapse` %>">
+                    <li class="group-header"><a href="#">Routines</a></li>
+                    <div<%- isRoutine ? `` : ` style="display: none;"` %>>
+                        <li<%- page === "/routines/commands" ? ` class="active"` : `` %>><a href="<%= baseUri %>routines/commands"><i class="fa-solid fa-message-bot"></i> Bot Commands</a></li>
                     </div>
                 </ul>
             </li>

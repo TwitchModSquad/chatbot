@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
 
-const utils = require("../../utils/");
 const config = require("../../config.json");
 
 const shardManager = require("../../twitch/objects/ShardManager");
 
-const chatbot = require("./chatbot/");
+const managers = require("./managers/");
+const routines = require("./routines/");
 
 router.get("/", (req, res) => {
     const currentShard = shardManager.getChannelShard(req.targetUser.user.login);
@@ -19,6 +19,7 @@ router.get("/", (req, res) => {
     });
 });
 
-router.use("/bot", chatbot);
+router.use("/managers", managers);
+router.use("/routines", routines);
 
 module.exports = router;

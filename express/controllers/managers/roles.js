@@ -6,7 +6,7 @@ const config = require("../../../config.json");
 
 router.get("/", async (req, res) => {
     const roles = await utils.Twitch.RoleManager.getChannelRoles(req.targetUser.user._id);
-    res.render("pages/chatbot/roles", {
+    res.render("pages/managers/roles", {
         roles,
         targetUser: req.targetUser,
         isOwned: req.isOwned,

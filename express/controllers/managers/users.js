@@ -46,7 +46,7 @@ router.get("/", async (req, res) => {
     }
 
     // Render
-    res.render("pages/chatbot/users", {
+    res.render("pages/managers/users", {
         userRoles,
         allRoles,
         customRoles,
