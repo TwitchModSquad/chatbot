@@ -55,6 +55,18 @@ $(function() {
         channelSelectOpen = !channelSelectOpen;
         return false;
     });
+
+    $("body").on("click", function(e) {
+        if ($(e.target).closest("#select-channel").length === 0 && !channelSelectMoving && channelSelectOpen) {
+            channelSelectMoving = true;
+            channelSelectOpen = false;
+            $("#select-channel").removeClass("open");
+            setTimeout(() => {
+                $("#select-channel").hide();
+                channelSelectMoving = false;
+            }, 200);
+        }
+    });
     
     $(".group-header a").on("click", function() {
         const group = $(this).parent().parent();
